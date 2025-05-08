@@ -1,8 +1,10 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy.orm import Session
-from typing import List
+from typing import Dict, Any
 import logging
+
+# Import routers
+from routers import timeline, probability, narratives, geospatial
 
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
@@ -23,8 +25,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Include routers
+app.include_router(timeline.router)
+app.include_router(probability.router)
+app.include_router(narratives.router)
+app.include_router(geospatial.router)
+
 @app.get("/")
-async def root():
+async def root() -> Dict[str, Any]:
     """Root endpoint for API health check"""
     return {
         "status": "online",
@@ -33,13 +41,16 @@ async def root():
     }
 
 @app.get("/health")
-async def health_check():
+async def health_check() -> Dict[str, Any]:
     """Health check endpoint"""
     return {
         "status": "healthy",
         "components": {
             "api": "operational",
-            "database": "pending"  # Will be updated once DB integration is complete
+            "timeline": "operational",
+            "probability": "operational",
+            "narratives": "operational",
+            "geospatial": "operational"
         }
     }
 
