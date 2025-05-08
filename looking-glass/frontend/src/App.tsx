@@ -11,11 +11,13 @@ import GeospatialView from './pages/GeospatialView';
 const App: React.FC = () => {
   return (
     <Router>
-      <div className="min-h-screen bg-gray-100">
+      <div className="flex h-screen flex-col">
         <Navbar />
-        <div className="flex">
-          <Sidebar />
-          <main className="flex-1 p-6">
+        <div className="flex flex-1 overflow-hidden">
+          <div className="w-64 flex-shrink-0">
+            <Sidebar />
+          </div>
+          <main className="flex-1 overflow-y-auto bg-gray-50">
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/timeline" element={<TimelineExplorer />} />
